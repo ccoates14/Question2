@@ -54,7 +54,7 @@ public class TestSolution {
 
             l1 = l1.next;
             l2 = l2.next;
-        } while (l1.next != null || l2.next != null);
+        } while (l1 != null || l2 != null);
     }
 
     private static ListNode arrayToLinkedList(int[] nums) {
