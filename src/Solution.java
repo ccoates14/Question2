@@ -1,8 +1,11 @@
 class Solution {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
-        //this is definitely something that could be done in linear time and constant space.
-        ListNode mergedList = null;
+        //this is definitely something that could be done in linear time.
+        if (l1 == null) return l2; //if l2 is also null then it is fine to return null
+        if (l2 == null) return l1;
+
         ListNode mergedListHead = null;
+        ListNode mergedList = null;
         /*
             find the larger list
             and find the smaller list
@@ -14,38 +17,31 @@ class Solution {
 
          */
 
-        ListNode smallerList = l1;
-        ListNode largerList = l2;
-        int smallerSize = countListSize(smallerList);
-        int largerSize = countListSize(largerList);
-
-        if (largerSize < smallerSize) {
-            largerList = smallerList;
-            smallerList = l2;
-        }
-
-        ListNode currentLargerListNode = largerList;
-        ListNode currentSmallerListNode = smallerList;
-
         do {
             //are the numbers equal? Add both, iterate both lists
-            if (currentSmallerListNode == null) {
-                //add the rest of the larger list
-                mergedList.next = currentLargerListNode;
-                currentLargerListNode = currentLargerListNode.next;
-                mergedList = mergedList.next;
-            } else if (currentLargerListNode == null) {
-                //add the rest of the larger list
-                mergedList.next = currentSmallerListNode;
-                currentSmallerListNode = currentSmallerListNode.next;
-                mergedList = mergedList.next;
-            } else if (currentLargerListNode.val == currentSmallerListNode.val) {
-                //iterate both
-                ListNode n1 = currentLargerListNode;
-                ListNode n2 = currentSmallerListNode;
+            if (l1 == null || l2 == null) {
+                ListNode nodeToIterate = l1;
 
-                currentLargerListNode = currentLargerListNode.next;
-                currentSmallerListNode = currentSmallerListNode.next;
+                if (l2 != null) {
+                    nodeToIterate = l2;
+                }
+
+                mergedList.next = nodeToIterate;
+                mergedList = mergedList.next;
+
+                if (l2 != null) {
+                    l2 = nodeToIterate.next;
+                } else {
+                    l1 = nodeToIterate.next;
+                }
+
+            } else if (l1.val == l2.val) {
+                //iterate both
+                ListNode n1 = l1;
+                ListNode n2 = l2;
+
+                l1 = l1.next;
+                l2 = l2.next;
 
                 if (mergedList == null) {
                     mergedList = n1;
@@ -64,42 +60,34 @@ class Solution {
                 //else is the current number in the larger list smaller than the current number in the smaller list:
                 //yes ? add it to the new list and iterate the larger list
                 //no ? add current number from smaller list and iterate it
-                if (currentLargerListNode.val < currentSmallerListNode.val) {
-                    if (mergedList == null) {
-                        mergedList = currentLargerListNode;
-                        mergedListHead = mergedList;
-                    } else {
-                        mergedList.next = currentLargerListNode;
-                        mergedList = mergedList.next;
-                    }
-                    currentLargerListNode = currentLargerListNode.next;
+                ListNode nodeToIterate;
+
+                if (l1.val <= l2.val) {
+                    nodeToIterate = l1;
                 } else {
-                    if (mergedList == null) {
-                        mergedList = currentSmallerListNode;
-                        mergedListHead = mergedList;
-                    } else {
-                        mergedList.next = currentSmallerListNode;
-                        mergedList = mergedList.next;
-                    }
-                    currentSmallerListNode = currentSmallerListNode.next;
+                    nodeToIterate = l2;
+                }
+
+                if (mergedList == null) {
+                    mergedList = nodeToIterate;
+                    mergedListHead = mergedList;
+                } else {
+                    mergedList.next = nodeToIterate;
+                    mergedList = mergedList.next;
+                }
+
+                if (l1.val < l2.val) {
+                    l1 = l1.next;
+                } else {
+                    l2 = l2.next;
                 }
 
             }
 
-        } while (currentLargerListNode != null || currentSmallerListNode != null);
+        } while (l1 != null || l2 != null);
 
 
         return mergedListHead;
     }
 
-    private int countListSize(ListNode node) {
-        int count = 0;
-
-        do {
-            count++;
-            node = node.next;
-        } while (node != null);
-
-        return count;
-    }
 }
