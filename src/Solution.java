@@ -64,8 +64,10 @@ class Solution {
 
                 if (l1.val <= l2.val) {
                     nodeToIterate = l1;
+                    l1 = l1.next;
                 } else {
                     nodeToIterate = l2;
+                    l2 = l2.next;
                 }
 
                 if (mergedList == null) {
@@ -74,12 +76,6 @@ class Solution {
                 } else {
                     mergedList.next = nodeToIterate;
                     mergedList = mergedList.next;
-                }
-
-                if (l1.val < l2.val) {
-                    l1 = l1.next;
-                } else {
-                    l2 = l2.next;
                 }
 
             }
